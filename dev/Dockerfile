@@ -57,9 +57,9 @@ RUN mkdir -p \
       tools
 
 # jguiang: install Rucio source from cloned fork in /tmp/rucio
-RUN cp -R /tmp/rucio/lib/rucio /opt/rucio/lib/rucio
-RUN cp -R /tmp/rucio/bin /opt/rucio/bin
-RUN cp -R /tmp/rucio/tools /opt/rucio/tools
+RUN cp -R /tmp/rucio/lib/rucio/* /opt/rucio/lib/rucio
+RUN cp -R /tmp/rucio/bin/* /opt/rucio/bin
+RUN cp -R /tmp/rucio/tools/* /opt/rucio/tools
 
 RUN python3 -m pip install --no-cache --upgrade pip && \
     python3 -m pip install --no-cache --upgrade setuptools wheel && \
