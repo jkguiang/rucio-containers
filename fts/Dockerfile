@@ -8,6 +8,9 @@ RUN yum upgrade -y
 RUN yum install -y mysql multitail gfal2-plugin* fts-server fts-client fts-rest fts-monitoring fts-mysql fts-msg python2-pip
 RUN yum clean all
 
+# jguiang: install latest versions of gfal2 and davix
+RUN yum install -y gfal2 davix
+
 # Setup FTS security
 COPY certs/hostcert_fts.pem /etc/grid-security/hostcert.pem
 COPY certs/hostcert_fts.key.pem /etc/grid-security/hostkey.pem

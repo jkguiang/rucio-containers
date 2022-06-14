@@ -37,7 +37,11 @@ RUN yum -y install epel-release && \
     yum clean all && \
     rm -rf /var/cache/yum
 
-ARG GIT_CLONE_ARGS="--depth 1 https://github.com/rucio/rucio.git"
+# jguiang: install latest versions of gfal2 and davix
+RUN yum install -y gfal2 davix
+
+# jguiang: clone aaarora fork of Rucio
+ARG GIT_CLONE_ARGS="https://github.com/aaarora/rucio.git -b dmm-v0.1.0"
 
 RUN git clone $GIT_CLONE_ARGS /tmp/rucio && rm -rf /tmp/rucio/.git
 
@@ -52,6 +56,11 @@ RUN mkdir -p \
       lib/rucio \
       tools
 
+# jguiang: install Rucio source from cloned fork in /tmp/rucio
+RUN cp -R /tmp/rucio/lib/rucio /opt/rucio/lib/rucio
+RUN cp -R /tmp/rucio/bin /opt/rucio/bin
+RUN cp -R /tmp/rucio/tools /opt/rucio/tools
+
 RUN python3 -m pip install --no-cache --upgrade pip && \
     python3 -m pip install --no-cache --upgrade setuptools wheel && \
     if [ -r /tmp/rucio/requirements.txt ]; then \
@@ -63,6 +72,9 @@ RUN python3 -m pip install --no-cache --upgrade pip && \
     ln -s $RUCIOHOME/lib/rucio /usr/local/lib/python3.6/site-packages/rucio
 
 RUN python3 -m pip install --no-cache --upgrade fts3
+
+# jguiang: install SENSE-O v1.23
+RUN python3 -m pip install sense-o-api==1.23
 
 COPY .pep8 .pep8
 COPY .flake8 .flake8
